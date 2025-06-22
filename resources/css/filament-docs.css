@@ -1,0 +1,264 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Filament Docs Plugin Core Styles */
+
+@layer base {
+  :root {
+    /* Default Filament color variables - these will be overridden by Filament's theme */
+    --primary-50: 239 246 255;
+    --primary-100: 219 234 254;
+    --primary-200: 191 219 254;
+    --primary-300: 147 197 253;
+    --primary-400: 96 165 250;
+    --primary-500: 59 130 246;
+    --primary-600: 37 99 235;
+    --primary-700: 29 78 216;
+    --primary-800: 30 64 175;
+    --primary-900: 30 58 138;
+    --primary-950: 23 37 84;
+
+    --gray-50: 249 250 251;
+    --gray-100: 243 244 246;
+    --gray-200: 229 231 235;
+    --gray-300: 209 213 219;
+    --gray-400: 156 163 175;
+    --gray-500: 107 114 128;
+    --gray-600: 75 85 99;
+    --gray-700: 55 65 81;
+    --gray-800: 31 41 55;
+    --gray-900: 17 24 39;
+    --gray-950: 3 7 18;
+  }
+}
+
+@layer components {
+  /* Enhanced Filament-style components */
+  .filament-docs-search-highlight {
+    @apply bg-yellow-200 dark:bg-yellow-800/30 text-yellow-800 dark:text-yellow-200 px-1.5 py-0.5 rounded-md font-medium;
+  }
+
+  .filament-docs-loading-spinner {
+    @apply animate-spin;
+  }
+
+  .filament-docs-sidebar {
+    @apply transition-all duration-300 ease-in-out;
+  }
+
+  .filament-docs-content {
+    @apply transition-opacity duration-300 ease-in-out;
+  }
+
+  .filament-docs-section-button {
+    @apply w-full text-left p-3 rounded-xl mb-2 transition-all duration-200 group flex items-center;
+  }
+
+  .filament-docs-section-button--active {
+    @apply bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/50 dark:to-primary-800/50 text-primary-800 dark:text-primary-200 border border-primary-200 dark:border-primary-700 shadow-sm;
+  }
+
+  .filament-docs-section-button--inactive {
+    @apply hover:bg-gray-50 dark:hover:bg-gray-800/50 text-gray-700 dark:text-gray-300 border border-transparent hover:border-gray-200 dark:hover:border-gray-700;
+  }
+
+  .filament-docs-section-number {
+    @apply w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold mr-3;
+  }
+
+  .filament-docs-section-number--active {
+    @apply bg-primary-600 text-white shadow-sm;
+  }
+
+  .filament-docs-section-number--inactive {
+    @apply bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 group-hover:bg-gray-200 dark:group-hover:bg-gray-600;
+  }
+
+  .filament-docs-progress-bar {
+    @apply transition-all duration-500 ease-out;
+  }
+
+  .filament-docs-nav-button {
+    @apply inline-flex items-center px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-primary-600 dark:hover:text-primary-400 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-200 shadow-sm group;
+  }
+
+  /* Enhanced table styling */
+  .filament-docs-table {
+    @apply w-full border-collapse bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm;
+  }
+
+  .filament-docs-table thead {
+    @apply bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700;
+  }
+
+  .filament-docs-table th {
+    @apply px-4 py-3 text-left font-semibold text-gray-700 dark:text-gray-200 text-xs uppercase tracking-wider;
+  }
+
+  .filament-docs-table td {
+    @apply px-4 py-3 text-gray-600 dark:text-gray-300 border-b border-gray-100 dark:border-gray-700;
+  }
+
+  .filament-docs-table tbody tr:hover {
+    @apply bg-primary-50/70 dark:bg-primary-900/30 transition-colors duration-150;
+  }
+
+  .filament-docs-table tbody tr:nth-child(even) {
+    @apply bg-gray-50/50 dark:bg-gray-900/50;
+  }
+
+  /* Enhanced content styling */
+  .filament-docs-content-card {
+    @apply bg-white dark:bg-gray-950 rounded-xl shadow-sm border border-gray-200/60 dark:border-gray-800/60 overflow-hidden;
+  }
+
+  .filament-docs-section-header {
+    @apply bg-gradient-to-r from-primary-50 via-primary-50 to-primary-100 dark:from-primary-950/50 dark:via-primary-900/30 dark:to-primary-800/20 p-6 border-b border-gray-200/60 dark:border-gray-800/60;
+  }
+
+  .filament-docs-section-title {
+    @apply text-xl font-bold text-gray-900 dark:text-gray-100;
+  }
+
+  .filament-docs-section-subtitle {
+    @apply text-sm text-gray-600 dark:text-gray-400 mt-1 font-medium;
+  }
+
+  .filament-docs-search-container {
+    @apply relative;
+  }
+
+  .filament-docs-search-input {
+    @apply w-full px-4 py-3 pl-11 pr-11 text-sm text-gray-900 dark:text-gray-100 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border border-white/20 dark:border-gray-600/50 rounded-lg focus:ring-2 focus:ring-white/30 focus:border-white/30 dark:focus:ring-primary-400/30 dark:focus:border-primary-400/30 transition-all duration-200 placeholder:text-gray-500 dark:placeholder:text-gray-400;
+  }
+
+  .filament-docs-search-icon {
+    @apply absolute left-3 top-3.5 w-4 h-4 text-gray-400 dark:text-gray-500;
+  }
+
+  .filament-docs-search-clear {
+    @apply absolute right-3 top-3.5 w-4 h-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors duration-200;
+  }
+}
+
+@layer utilities {
+  /* Custom scrollbar styles */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thumb-gray-300 {
+    scrollbar-color: rgb(209 213 219) transparent;
+  }
+
+  .dark .scrollbar-thumb-gray-600 {
+    scrollbar-color: rgb(75 85 99) transparent;
+  }
+
+  .scrollbar-track-transparent {
+    scrollbar-color: transparent transparent;
+  }
+
+  /* Print styles */
+  @media print {
+    .no-print {
+      @apply hidden;
+    }
+
+    .print-only {
+      @apply block;
+    }
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.3s ease-out;
+  }
+}
+
+/* Prose enhancements for documentation content */
+.filament-docs-prose {
+  @apply prose prose-gray dark:prose-invert max-w-none;
+}
+
+.filament-docs-prose h1 {
+  @apply text-gray-900 dark:text-gray-100 font-bold border-b-2 border-primary-100 dark:border-primary-800 pb-2;
+}
+
+.filament-docs-prose h2 {
+  @apply text-gray-800 dark:text-gray-200 font-semibold;
+}
+
+.filament-docs-prose h3 {
+  @apply text-gray-800 dark:text-gray-200 font-medium;
+}
+
+.filament-docs-prose code {
+  @apply bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded font-medium;
+}
+
+.filament-docs-prose pre {
+  @apply bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg;
+}
+
+.filament-docs-prose blockquote {
+  @apply border-l-4 border-primary-400 dark:border-primary-600 bg-primary-50/50 dark:bg-primary-900/20 rounded-r-lg pl-6 pr-4 py-4;
+}
+
+.filament-docs-prose a {
+  @apply text-primary-600 dark:text-primary-400 font-medium no-underline border-b border-transparent transition-all duration-200;
+}
+
+.filament-docs-prose a:hover {
+  @apply text-primary-700 dark:text-primary-300 border-primary-300 dark:border-primary-600;
+}
+
+.filament-docs-prose ul,
+.filament-docs-prose ol {
+  @apply text-gray-600 dark:text-gray-300;
+}
+
+.filament-docs-prose li::marker {
+  @apply text-primary-500 dark:text-primary-400;
+}
+
+/* Table container for responsive tables */
+.filament-docs-table-container {
+  @apply overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-sm;
+}
+
+/* Loading states */
+.filament-docs-loading {
+  @apply opacity-50 pointer-events-none;
+}
+
+/* Focus states for accessibility */
+.filament-docs-focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+}
+
+/* Empty states */
+.filament-docs-empty-state {
+  @apply text-center py-12 px-6;
+}
+
+.filament-docs-empty-icon {
+  @apply w-24 h-24 mx-auto mb-6 bg-gray-50 dark:bg-gray-900 rounded-full flex items-center justify-center border border-gray-200 dark:border-gray-800;
+}
+
+.filament-docs-empty-title {
+  @apply text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3;
+}
+
+.filament-docs-empty-description {
+  @apply text-gray-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed;
+}

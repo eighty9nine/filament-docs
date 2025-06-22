@@ -1,0 +1,76 @@
+{
+    "name": "eightynine/filament-docs",
+    "description": "Elegant documentation system for your Filament application with search, navigation, and markdown support",
+    "keywords": [
+        "eightynine",
+        "laravel",
+        "filament",
+        "documentation",
+        "markdown",
+        "search"
+    ],
+    "homepage": "https://github.com/eightynine/filament-docs",
+    "support": {
+        "issues": "https://github.com/eightynine/filament-docs/issues",
+        "source": "https://github.com/eightynine/filament-docs"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Eighty Nine",
+            "email": "eighty9nine@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "filament/filament": "^3.0",
+        "illuminate/contracts": "^10.0|^11.0|^12.0",
+        "league/commonmark": "^2.4",
+        "spatie/laravel-package-tools": "^1.15.0",
+        "barryvdh/laravel-dompdf": "^3.0"
+    },
+    "require-dev": {
+        "nunomaduro/collision": "^7.9|^8.0",
+        "orchestra/testbench": "^8.0|^9.0|^10.0",
+        "pestphp/pest": "^2.0|^3.0",
+        "pestphp/pest-plugin-arch": "^2.0|^3.0",
+        "pestphp/pest-plugin-laravel": "^2.0|^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "EightyNine\\FilamentDocs\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EightyNine\\FilamentDocs\\Tests\\": "tests/"
+        }
+    },    "scripts": {
+        "post-autoload-dump": "@php ./vendor/bin/testbench package:discover --ansi",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "build": [
+            "@build-assets"
+        ],
+        "build-assets": "npm run build",
+        "build-dev": "npm run dev",
+        "build-watch": "npm run watch"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "EightyNine\\FilamentDocs\\FilamentDocsServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

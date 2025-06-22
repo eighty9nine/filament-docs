@@ -1,0 +1,29 @@
+{
+  "name": "filament-docs",
+  "version": "1.0.0",
+  "description": "Elegant documentation system for your Filament application",
+  "main": "resources/js/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "lint": "eslint resources/js --ext .js,.vue",
+    "format": "prettier --write resources/js/**/*.{js,vue,css,scss}"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.13",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "vite": "^5.2.12"
+  },
+  "keywords": [
+    "filament",
+    "documentation",
+    "laravel",
+    "markdown"
+  ],
+  "author": "Eighty Nine",
+  "license": "MIT"
+}
