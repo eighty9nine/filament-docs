@@ -5,9 +5,12 @@ namespace EightyNine\FilamentDocs\Pages;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use League\CommonMark\CommonMarkConverter;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\Response;
+use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Environment\Environment;
+
 
 abstract class DocsPage extends Page
 {
@@ -222,14 +225,19 @@ abstract class DocsPage extends Page
             
             if ($hasMatches) {
                 $results[] = [
-                    'section' => $section,
-                    'matches' => array_slice($matches, 0, 3), // Limit to 3 matches per section
+                    'section' => $section,                    'matches' => array_slice($matches, 0, $this->getMaxResultsPerSection()), // Limit matches per section
                     'total_matches' => count($matches)
                 ];
             }
         }
         
         return $results;
+    }    /**
+     * Get maximum results per section from config
+     */
+    protected function getMaxResultsPerSection(): int
+    {
+        return config('filament-docs.search.max_results_per_section', 3);
     }
 
     /**
@@ -237,12 +245,14 @@ abstract class DocsPage extends Page
      */
     public function highlightSearchTerm(string $text, string $term): string
     {
+        $highlightClass = config('filament-docs.search.highlight_class', 'bg-yellow-200 text-yellow-800 px-1 rounded');
+        
         return preg_replace(
             '/(' . preg_quote($term, '/') . ')/i',
-            '<mark class="bg-yellow-200 text-yellow-800 px-1 rounded">$1</mark>',
+            '<mark class="' . $highlightClass . '">$1</mark>',
             $text
         );
-    }    /**
+    }/**
      * Get all manual sections metadata (without content)
      */
     public function getManualSections(): array
@@ -259,9 +269,8 @@ abstract class DocsPage extends Page
         }
         
         $files = File::files($manualPath);
-        
-        foreach ($files as $file) {
-            if ($file->getExtension() === 'md') {
+          foreach ($files as $file) {
+            if ($this->isSupportedFile($file)) {
                 $filename = $file->getFilenameWithoutExtension();
                 
                 // Extract title from first line if it's a heading (read only first few lines)
@@ -314,27 +323,136 @@ abstract class DocsPage extends Page
         }
         
         return null;
-    }
-
-    /**
+    }    /**
      * Parse markdown content to HTML
      */
     private function parseMarkdown(string $markdown): string
     {
-        $converter = new CommonMarkConverter([
-            'html_input' => 'strip',
-            'allow_unsafe_links' => false,
+        // Get markdown configuration
+        $markdownConfig = config('filament-docs.markdown', []);
+        $extensionsConfig = $markdownConfig['extensions'] ?? [];
+        
+        // Create environment with base configuration
+        $environment = new Environment([
+            'html_input' => $markdownConfig['html_input'] ?? 'strip',
+            'allow_unsafe_links' => $markdownConfig['allow_unsafe_links'] ?? false,
+            'max_nesting_level' => $markdownConfig['max_nesting_level'] ?? 10,
         ]);
         
+        // Add extensions based on configuration
+        $this->addConfiguredExtensions($environment, $extensionsConfig);
+        
+        $converter = new CommonMarkConverter([], $environment);
         return $converter->convert($markdown)->getContent();
     }
 
     /**
+     * Add configured CommonMark extensions to the environment
+     */
+    private function addConfiguredExtensions(Environment $environment, array $extensionsConfig): void
+    {
+        // Always add CommonMark Core Extension
+        if ($extensionsConfig['commonmark_core'] ?? true) {
+            $environment->addExtension(new CommonMarkCoreExtension());
+        }
+
+        // Table extension
+        if ($extensionsConfig['table'] ?? false) {
+            if (class_exists('League\CommonMark\Extension\Table\TableExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\Table\TableExtension());
+            }
+        }
+
+        // Strikethrough extension
+        if ($extensionsConfig['strikethrough'] ?? false) {
+            if (class_exists('League\CommonMark\Extension\Strikethrough\StrikethroughExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\Strikethrough\StrikethroughExtension());
+            }
+        }
+
+        // Autolink extension
+        if ($extensionsConfig['autolink'] ?? false) {
+            if (class_exists('League\CommonMark\Extension\Autolink\AutolinkExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\Autolink\AutolinkExtension());
+            }
+        }
+
+        // Task list extension
+        if ($extensionsConfig['task_list'] ?? false) {
+            if (class_exists('League\CommonMark\Extension\TaskList\TaskListExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\TaskList\TaskListExtension());
+            }
+        }
+
+        // Disallowed raw HTML extension
+        if (isset($extensionsConfig['disallowed_raw_html']) && is_array($extensionsConfig['disallowed_raw_html'])) {
+            if (class_exists('League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension($extensionsConfig['disallowed_raw_html']));
+            }
+        }
+
+        // Attributes extension
+        if ($extensionsConfig['attributes'] ?? false) {
+            if (class_exists('League\CommonMark\Extension\Attributes\AttributesExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\Attributes\AttributesExtension());
+            }
+        }
+
+        // Footnote extension
+        if ($extensionsConfig['footnote'] ?? false) {
+            if (class_exists('League\CommonMark\Extension\Footnote\FootnoteExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\Footnote\FootnoteExtension());
+            }
+        }
+
+        // Description list extension
+        if ($extensionsConfig['description_list'] ?? false) {
+            if (class_exists('League\CommonMark\Extension\DescriptionList\DescriptionListExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\DescriptionList\DescriptionListExtension());
+            }
+        }
+
+        // External link extension
+        if (isset($extensionsConfig['external_link']) && is_array($extensionsConfig['external_link'])) {
+            if (class_exists('League\CommonMark\Extension\ExternalLink\ExternalLinkExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\ExternalLink\ExternalLinkExtension($extensionsConfig['external_link']));
+            }
+        }
+
+        // Table of contents extension
+        if (isset($extensionsConfig['table_of_contents']) && is_array($extensionsConfig['table_of_contents'])) {
+            if (class_exists('League\CommonMark\Extension\TableOfContents\TableOfContentsExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\TableOfContents\TableOfContentsExtension($extensionsConfig['table_of_contents']));
+            }
+        }
+
+        // Smart punctuation extension
+        if ($extensionsConfig['smart_punct'] ?? false) {
+            if (class_exists('League\CommonMark\Extension\SmartPunct\SmartPunctExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\SmartPunct\SmartPunctExtension());
+            }
+        }
+
+        // Heading permalink extension
+        if (isset($extensionsConfig['heading_permalink']) && is_array($extensionsConfig['heading_permalink'])) {
+            if (class_exists('League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension')) {
+                $environment->addExtension(new \League\CommonMark\Extension\HeadingPermalink\HeadingPermalinkExtension($extensionsConfig['heading_permalink']));
+            }
+        }
+    }    /**
      * Get section order based on filename
      * Override this method to customize section ordering
      */
     protected function getSectionOrder(string $filename): int
     {
+        // Get order from config first
+        $configOrder = config('filament-docs.section_order', []);
+        
+        if (isset($configOrder[$filename])) {
+            return $configOrder[$filename];
+        }
+        
+        // Fallback to default ordering
         $orderMap = [
             'getting-started' => 1,
             'installation' => 2,
@@ -345,7 +463,7 @@ abstract class DocsPage extends Page
         ];
         
         return $orderMap[$filename] ?? 99;
-    }    /**
+    }/**
      * Get the title for the documentation
      * Override this method to customize the title
      */
@@ -355,8 +473,33 @@ abstract class DocsPage extends Page
     }
 
     /**
+     * Get the path to markdown files from config with fallback
+     */
+    protected function getDefaultDocsPath(): string
+    {
+        return config('filament-docs.default_docs_path', resource_path('docs'));
+    }
+
+    /**
      * Get the path to markdown files
      * Override this method to specify custom docs path
      */
     abstract protected function getDocsPath(): string;
+
+    /**
+     * Get supported file extensions from config
+     */
+    protected function getSupportedExtensions(): array
+    {
+        return config('filament-docs.supported_extensions', ['md', 'markdown']);
+    }
+
+    /**
+     * Check if file has supported extension
+     */
+    protected function isSupportedFile(\SplFileInfo $file): bool
+    {
+        $supportedExtensions = $this->getSupportedExtensions();
+        return in_array($file->getExtension(), $supportedExtensions);
+    }
 }
