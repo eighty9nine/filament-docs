@@ -10,14 +10,13 @@
         printCurrent: @entangle('isPrintingCurrent'),
         printAll: @entangle('isPrintingAll'),
         sidebarCollapsed: false
-    }" x-init="$watch('printCurrent', value => {
-        if (value) {
-            document.body.classList.add('print-current-section');
-            setTimeout(() => {
+    }" x-init="$watch('printCurrent', value => {        if (value) {
+            document.body.classList.add('print-current-section');                                @heroicon('o-magnifying-glass', ['class' => 'w-12 h-12 text-gray-400 dark:text-gray-500'])
+                                       @heroicon('o-arrow-left', ['class' => 'w-4 h-4 mr-2'])    setTimeout(() => {
                 window.print();
                 $wire.resetPrintFlags();
-                document.body.classList.remove('print-current-section');
-            }, 100);
+                document.body.classList                                                @heroicon('o-arrow-left', ['class' => 'w-3 h-3 mr-1.5'])remove('print-current-section');
+                                                 @heroicon('o-arrow-right', ['class' => 'w-3 h-3 ml-1.5'])          }, 100);
         }
     });
     $watch('printAll', value => {
@@ -397,24 +396,21 @@
                         <div class="bg-primary-600 text-white p-4 rounded-t-lg">
                             <div class="flex items-center justify-between mb-3">
                                 <h2 class="text-lg font-bold flex items-center">
-                                    <x-heroicon-o-list-bullet class="w-5 h-5 mr-2" />
+                                    @heroicon('o-list-bullet', ['class' => 'w-5 h-5 mr-2'])
                                     {{ __('filament-docs::docs.navigation.sections') }}
-                                </h2>
-                                <button @click="sidebarCollapsed = true"
+                                </h2>                                <button @click="sidebarCollapsed = true"
                                     class="lg:block hidden p-1 hover:bg-primary-700 rounded transition-colors">
-                                    <x-heroicon-o-x-mark class="w-4 h-4" />
-                                </button>
-                            </div> <!-- Search Box -->
+                                    @heroicon('o-x-mark', ['class' => 'w-4 h-4'])
+                                </button>                            </div> <!-- Search Box -->
                             <div class="relative">
                                 <input type="text" id="filament_docs_search_input" wire:model.live.debounce.300ms="searchQuery"
                                     placeholder="{{ __('filament-docs::docs.search.placeholder') }}"
                                     class="w-full px-3 py-2 pl-9 pr-9 text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 border border-white/20 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent">
-                                <x-heroicon-o-magnifying-glass
-                                    class="absolute left-2.5 top-2.5 w-4 h-4 text-gray-400 dark:text-gray-500" />
+                                @heroicon('o-magnifying-glass', ['class' => 'absolute left-2.5 top-2.5 w-4 h-4 text-gray-400 dark:text-gray-500'])
                                 @if (!empty($this->searchQuery))
                                     <button wire:click="clearSearch"
                                         class="absolute right-2.5 top-2.5 w-4 h-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
-                                        <x-heroicon-o-x-mark class="w-4 h-4" />
+                                        @heroicon('o-x-mark', ['class' => 'w-4 h-4'])
                                     </button>
                                 @endif
                             </div>
@@ -425,28 +421,20 @@
                                 @else
                                     {{ trans_choice('filament-docs::docs.navigation.sections_count', count($sections), ['count' => count($sections)]) }}
                                 @endif
-                            </p>
-                        </div> <!-- Navigation Menu -->
+                            </p>                        </div> <!-- Navigation Menu -->
                         <nav class="p-2 max-h-96 overflow-y-auto">
                             @if (empty($sections))
                                 <div class="p-4 text-center text-gray-500 dark:text-gray-400">
-                                    <x-heroicon-o-exclamation-circle
-                                        class="w-8 h-8 mx-auto mb-2 text-gray-400 dark:text-gray-500" />
+                                    @heroicon('o-exclamation-circle', ['class' => 'w-8 h-8 mx-auto mb-2 text-gray-400 dark:text-gray-500'])
                                     <p class="text-sm">{{ __('filament-docs::docs.empty.no_documentation') }}</p>
                                 </div>
                             @elseif(!empty($this->searchQuery))
                                 <!-- Search Results -->
                                 @if (empty($searchResults))
-                                    <div class="p-4 text-center text-gray-500 dark:text-gray-400">
-                                        <x-heroicon-o-magnifying-glass
-                                            class="w-8 h-8 mx-auto mb-2 text-gray-400 dark:text-gray-500" />
+                                    <div class="p-4 text-center text-gray-500 dark:text-gray-400">                                        @heroicon('o-magnifying-glass', ['class' => 'w-8 h-8 mx-auto mb-2 text-gray-400 dark:text-gray-500'])
                                         <p class="text-sm">
                                             {{ __('filament-docs::docs.search.no_results', ['query' => $this->searchQuery]) }}
                                         </p>
-                                        <button wire:click="clearSearch"
-                                            class="mt-2 text-xs text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300">
-                                            {{ __('filament-docs::docs.search.clear') }}
-                                        </button>
                                     </div>
                                 @else
                                     @foreach ($searchResults as $result)
@@ -504,28 +492,33 @@
 
                                         <div class="flex-1 min-w-0">
                                             <span
-                                                class="font-medium text-sm block truncate">{{ $section['title'] }}</span>
-                                        </div>
-
+                                                class="font-medium text-sm block truncate">{{ $section['title'] }}</span>                                        </div>
                                         @if ($section['id'] === $this->selectedSection)
-                                            <x-heroicon-o-chevron-right
-                                                class="w-4 h-4 text-primary-600 dark:text-primary-400" />
+                                            @heroicon('o-chevron-right', ['class' => 'w-4 h-4 text-primary-600 dark:text-primary-400'])
                                         @endif
-                                    </button>
-                                @endforeach
+                                    </button>                                @endforeach
                             @endif
                         </nav>
                     </div>
-                </div> <!-- Main Content Area -->
+                </div>
+
+                <!-- Main Content Area -->
                 <div class="flex-1 min-w-0 main-content-area" :class="{ 'lg:ml-0': sidebarCollapsed }">
                     <!-- Collapsed Sidebar Toggle Button -->
                     <div x-show="sidebarCollapsed" x-transition:enter="transition ease-out duration-300"
                         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                        class="lg:block hidden mb-4"> <button @click="sidebarCollapsed = false"
+                        class="lg:block hidden mb-4">
+                        <button @click="sidebarCollapsed = false"
                             class="bg-primary-600 text-white p-3 rounded-lg shadow-lg hover:bg-primary-700 transition-colors flex items-center">
-                            <x-heroicon-o-bars-3 class="w-5 h-5 mr-2" />
+                            @heroicon('o-bars-3', ['class' => 'w-5 h-5 mr-2'])
                             {{ __('filament-docs::docs.navigation.show_menu') }}
                         </button>
+                    </div>
+                    @if (empty($sections))
+                        <!-- No Documentation Available -->                        class="lg:block hidden mb-4"> <button @click="sidebarCollapsed = false"
+                            class="bg-primary-600 text-white p-3 rounded-lg shadow-lg hover:bg-primary-700 transition-colors flex items-center">
+                            @heroicon('o-bars-3', ['class' => 'w-5 h-5 mr-2'])
+                            {{ __('filament-docs::docs.navigation.show_menu') }}                        </button>
                     </div>
                     @if (empty($sections))
                         <!-- No Documentation Available -->
@@ -533,7 +526,14 @@
                             class="bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-12 text-center">
                             <div
                                 class="w-24 h-24 mx-auto mb-6 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
-                                <x-heroicon-o-book-open class="w-12 h-12 text-gray-400 dark:text-gray-500" />
+                                @heroicon('o-book-open', ['class' => 'w-12 h-12 text-gray-400 dark:text-gray-500'])
+                            </div>ctions))
+                        <!-- No Documentation Available -->
+                        <div
+                            class="bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-12 text-center">
+                            <div
+                                class="w-24 h-24 mx-auto mb-6 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
+                                @heroicon('o-book-open', ['class' => 'w-12 h-12 text-gray-400 dark:text-gray-500'])
                             </div>
                             <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-3">
                                 {{ __('filament-docs::docs.empty.title') }}</h3>
@@ -546,7 +546,7 @@
                             class="bg-white dark:bg-gray-900 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-12 text-center">
                             <div
                                 class="w-24 h-24 mx-auto mb-6 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center">
-                                <x-heroicon-o-magnifying-glass class="w-12 h-12 text-gray-400 dark:text-gray-500" />
+                                <x-filament::icon icon="heroicon-o-magnifying-glass class="w-12 h-12 text-gray-400 dark:text-gray-500" /">
                             </div>
                             <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-3">
                                 {{ __('filament-docs::docs.search.no_results_title') }}</h3>
@@ -555,7 +555,7 @@
                             </p>
                             <button wire:click="clearSearch"
                                 class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200">
-                                <x-heroicon-o-arrow-left class="w-4 h-4 mr-2" />
+                                <x-filament::icon icon="heroicon-o-arrow-left class="w-4 h-4 mr-2" /">
                                 {{ __('filament-docs::docs.search.back_to_sections') }}
                             </button>
                         </div>
@@ -694,7 +694,7 @@
                                         @if ($prevSection)
                                             <button wire:click="selectSection('{{ $prevSection['id'] }}')"
                                                 class="inline-flex items-center px-3 py-1.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
-                                                <x-heroicon-o-arrow-left class="w-3 h-3 mr-1.5" />
+                                                <x-filament::icon icon="heroicon-o-arrow-left class="w-3 h-3 mr-1.5" /">
                                                 <div class="text-left">
                                                     <div class="text-xs text-gray-500">
                                                         {{ __('filament-docs::docs.navigation.previous') }}</div>
@@ -730,7 +730,7 @@
                                                         {{ __('filament-docs::docs.navigation.next') }}</div>
                                                     <div class="font-medium text-sm">{{ $nextSection['title'] }}</div>
                                                 </div>
-                                                <x-heroicon-o-arrow-right class="w-3 h-3 ml-1.5" />
+                                                <x-filament::icon icon="heroicon-o-arrow-right class="w-3 h-3 ml-1.5" /">
                                             </button>
                                         @endif
                                     </div>

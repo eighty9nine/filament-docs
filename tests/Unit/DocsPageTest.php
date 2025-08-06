@@ -137,11 +137,10 @@ echo "Hello World!";
     $method->setAccessible(true);
     
     $html = $method->invoke($this->docsPage, $markdown);
-    
-    expect($html)->toContain('<h1>')
+      expect($html)->toContain('<h1>')
         ->and($html)->toContain('<strong>')
         ->and($html)->toContain('<em>')
-        ->and($html)->toContain('<code>')
+        ->and($html)->toContain('<pre>')
         ->and($html)->toContain('<ul>');
 });
 

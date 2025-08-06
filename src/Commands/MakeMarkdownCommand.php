@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EightyNine\FilamentDocs\Commands;
 
 use Illuminate\Console\Command;
@@ -45,14 +47,15 @@ class MakeMarkdownCommand extends Command
             'api' => $this->getApiTemplate($name),
             'troubleshooting' => $this->getTroubleshootingTemplate($name),
             'feature' => $this->getFeatureTemplate($name),
-            default => $this->getBasicTemplate($name),
-        };
+            default => $this->getBasicTemplate($name),        };
     }
 
     protected function getBasicTemplate(string $name): string
     {
         return <<<MD
 # {$name}
+
+Welcome to the {$name} documentation.
 
 ## Overview
 
@@ -176,6 +179,10 @@ API documentation for {$name}.
 
 Describe authentication requirements.
 
+## Parameters
+
+Common parameters used across all endpoints.
+
 ## Endpoints
 
 ### GET /api/endpoint
@@ -295,6 +302,16 @@ How to verify the issue is resolved.
 **Solutions**:
 1. Different solution steps
 
+## FAQ
+
+### Frequently Asked Questions
+
+#### Q: How do I resolve issue X?
+A: Follow these steps to resolve issue X.
+
+#### Q: What causes error Y?
+A: Error Y is typically caused by...
+
 ## Diagnostic Steps
 
 ### Step 1: Check System Status
@@ -353,14 +370,12 @@ When contacting support, please include:
 
 *For urgent issues, contact emergency support.*
 MD;
-    }
-
-    protected function getFeatureTemplate(string $name): string
+    }    protected function getFeatureTemplate(string $name): string
     {
         return <<<MD
 # {$name} Feature
 
-## Overview
+## Description
 
 Description of the {$name} feature and its purpose.
 
@@ -369,6 +384,10 @@ Description of the {$name} feature and its purpose.
 - Benefit 1
 - Benefit 2
 - Benefit 3
+
+## Usage
+
+Basic usage information for the {$name} feature.
 
 ## How It Works
 

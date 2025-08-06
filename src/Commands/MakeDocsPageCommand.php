@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EightyNine\FilamentDocs\Commands;
 
 use Illuminate\Console\Command;
@@ -24,28 +26,34 @@ class MakeDocsPageCommand extends Command
         $slug = Str::slug($name);
 
         // Create the documentation page
-        $pageContent = $this->getPageStub();
-        $pageContent = str_replace(
+        $pageContent = $this->getPageStub();        $pageContent = str_replace(
             ['{{className}}', '{{slug}}', '{{navigationGroup}}', '{{navigationIcon}}', '{{title}}', '{{path}}'],
             [$className, $slug, $navigationGroup, $navigationIcon, $name, $path],
             $pageContent
         );
-
+        
         $pagePath = app_path("Filament/Pages/{$className}.php");
         
         if (file_exists($pagePath)) {
             $this->error("Page {$className} already exists!");
             return self::FAILURE;
-        }        file_put_contents($pagePath, $pageContent);
+        }
+
+        // Ensure the directory exists
+        $filesystem = new Filesystem();
+        $filesystem->ensureDirectoryExists(dirname($pagePath));
+        
+        file_put_contents($pagePath, $pageContent);
 
         // Create docs directory if it doesn't exist
-        $filesystem = new Filesystem();
         $filesystem->ensureDirectoryExists($path);
 
         // Create sample markdown file
         $sampleMarkdown = $this->getSampleMarkdownStub();
         $sampleMarkdown = str_replace('{{title}}', $name, $sampleMarkdown);
-        file_put_contents("{$path}/getting-started.md", $sampleMarkdown);        $this->info("Documentation page '{$className}' created successfully!");
+        file_put_contents("{$path}/getting-started.md", $sampleMarkdown);
+
+        $this->info("Documentation page '{$className}' created successfully!");
         $this->info("Page file: {$pagePath}");
         $this->info("Docs directory: {$path}");
         $this->info("Sample markdown: {$path}/getting-started.md");
@@ -99,12 +107,10 @@ class {{className}} extends DocsPage
         return '{{path}}';
     }
 }
-PHP;    }
-
-    protected function getSampleMarkdownStub(): string
+PHP;    }    protected function getSampleMarkdownStub(): string
     {
         return <<<'MD'
-# Getting Started
+# {{title}}
 
 Welcome to {{title}} documentation!
 

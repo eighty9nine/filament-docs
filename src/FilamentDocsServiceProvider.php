@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EightyNine\FilamentDocs;
 
 use EightyNine\FilamentDocs\Commands\MakeDocsPageCommand;

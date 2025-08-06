@@ -111,7 +111,9 @@ it('can handle multiple documentation sections', function () {
 });
 
 it('integrates properly with laravel service container', function () {
-    expect(app()->bound(FilamentDocsServiceProvider::class))->toBeTrue();
+    // Check if the config is loaded (indicates service provider is working)
+    expect(config('filament-docs'))->not->toBeNull()
+        ->and(config('filament-docs.default_docs_path'))->toBeString();
 });
 
 it('can load configuration from published config file', function () {
